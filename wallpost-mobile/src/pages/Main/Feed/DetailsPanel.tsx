@@ -1,32 +1,40 @@
+import { useNavigate } from "react-router-dom";
+import { DateTime } from "luxon";
 import type { Post } from "../../../types/post";
 import PostMap from "./PostMap";
 
 const DetailsPanel = ({ post, active }: { post: Post; active: boolean }) => {
+  const navigate = useNavigate();
+
+  const start = DateTime.fromISO(post.startDate);
+  const end = DateTime.fromISO(post.endDate);
+  const startText = start.isValid
+    ? start.setLocale("pl").toFormat("d LLL yyyy, HH:mm")
+    : post.startDate;
+  const endText = end.isValid
+    ? end.setLocale("pl").toFormat("d LLL yyyy, HH:mm")
+    : post.endDate;
+
   return (
     <div className="details-panel">
-      <div className="details-panel__content">
-        <h2 className="details-panel__title">{post.title}</h2>
+      <span className="details-panel__date">
+        {startText}
+        {endText && ` – ${endText}`}
+      </span>
 
-        <div className="details-panel__fields">
-          <p className="details-panel__field">
-            <span className="details-panel__label">Miejsce: </span>
-            <span className="details-panel__value">
-              {post.lat}, {post.lng}
-            </span>
-          </p>
-          <p className="details-panel__field">
-            <span className="details-panel__label">Data: </span>
-            <span className="details-panel__value">{post.startDate}</span>
-          </p>
-          <p className="details-panel__field">
-            <span className="details-panel__label">Opis: </span>
-            <span className="details-panel__value">{post.description}</span>
-          </p>
-        </div>
-      </div>
+      <h2 className="details-panel__title">{post.title}</h2>
+
+      <p className="details-panel__description">{post.description}</p>
 
       <div className="details-panel__map swiper-no-swiping">
         <PostMap post={post} active={active} />
+        <button
+          type="button"
+          className="details-panel__map-button"
+          onClick={() => navigate(`/map?post=${post.id}`)}
+        >
+          Zobacz na mapie
+        </button>
       </div>
     </div>
   );

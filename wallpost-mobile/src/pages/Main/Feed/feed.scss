@@ -2,9 +2,7 @@
 @use "@/styles/breakpoints" as *;
 
 // Feed-local palette (warm beige / taupe / dark brown).
-$feed-bg: #ffffff;
-$feed-beige: #ede5df;
-$feed-taupe: #c9b0a3;
+$feed-bg: #fefeff;
 $feed-brown: #2f2420;
 
 .feed {
@@ -13,7 +11,7 @@ $feed-brown: #2f2420;
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background-color: #FEFEFF;
+  background-color: $feed-bg;
   color: $feed-brown;
 
   &__swiper {
@@ -45,21 +43,15 @@ $feed-brown: #2f2420;
     background-color: $feed-bg;
   }
 
-  // Fades the top of the peeking poster so it reads as "more below".
-  &__bottom-fade {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: var(--feed-peek);
-    z-index: 10;
-    pointer-events: none;
-    background: linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0.9) 0%,
-      rgba(255, 255, 255, 0) 30%,
-      rgba(255, 255, 255, 0) 100%
-    );
+  &__state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--secondary);
   }
 
   &__overlay {
@@ -90,40 +82,61 @@ $feed-brown: #2f2420;
   &__dot {
     width: 8px;
     height: 8px;
-    border-radius: 50%;
-    background-color: $feed-taupe;
+    border-radius: 999px;
+    background-color: var(--secondary);
     opacity: 0.5;
-    transition: opacity 0.2s ease, transform 0.2s ease;
+    transition:
+      opacity 0.2s ease,
+      width 0.2s ease;
+
     &--active {
+      width: 22px;
       opacity: 1;
-      transform: scale(1.2);
       background-color: $feed-brown;
     }
   }
 }
 
 .post-card {
-  width: calc(100% - 16px);
+  box-sizing: border-box;
+  width: 100%;
   height: 75%;
   margin-bottom: 25%;
-  padding: 0px 8px 0px 8px;
+  padding: calc(var(--status-bar-height, 0px) + 8px) 8px 0;
+
   &__swiper {
     width: 100%;
     height: 100%;
+    border-radius: 24px;
   }
 
   &__panel {
     width: 100%;
     height: 100%;
     overflow: hidden;
+    border-radius: 24px;
   }
 }
 
 .poster-panel {
+  position: relative;
   width: 100%;
   height: 100%;
+  overflow: hidden;
+  border-radius: 24px;
+  background-color: var(--primary);
+
+  &__backdrop {
+    position: absolute;
+    inset: -24px;
+    width: calc(100% + 48px);
+    height: calc(100% + 48px);
+    object-fit: cover;
+    filter: blur(24px) brightness(0.92);
+  }
 
   &__image {
+    position: relative;
     width: 100%;
     height: 100%;
     object-fit: contain;
@@ -131,68 +144,96 @@ $feed-brown: #2f2420;
     user-select: none;
     -webkit-user-drag: none;
   }
+
+  &__date {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background-color: var(--secondary);
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
 }
 
 .details-panel {
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
   width: 100%;
   height: 100%;
-  padding: calc(24px + env(safe-area-inset-top)) 20px
-    calc(24px + env(safe-area-inset-bottom));
-  gap: 20px;
-  background-color: $feed-bg;
+  padding: 20px;
+  border-radius: 24px;
+  background-color: var(--primary);
+  color: $feed-brown;
 
-  &__content {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    min-height: 0;
+  &__date {
+    padding: 6px 14px;
+    border-radius: 999px;
+    background-color: var(--secondary);
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
   }
 
   &__title {
     margin: 0;
     font-family: $primary-font;
-    font-size: 32px;
+    font-size: 28px;
     font-weight: 700;
-    line-height: 115%;
-    color: $feed-brown;
+    line-height: 120%;
+    letter-spacing: -0.5px;
   }
 
-  &__fields {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  &__field {
+  &__description {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
     margin: 0;
+    overflow-y: auto;
     font-size: 16px;
     line-height: 150%;
-    color: $feed-brown;
-  }
-
-  &__label {
-    font-weight: 700;
-  }
-
-  &__value {
-    font-weight: 400;
+    white-space: pre-line;
   }
 
   &__map {
-    margin-top: auto;
+    position: relative;
+    flex-shrink: 0;
     width: 100%;
-    height: 220px;
-    border-radius: 24px;
+    height: 180px;
+    border-radius: 20px;
     overflow: hidden;
+  }
+
+  &__map-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 999px;
+    background-color: #ffffff;
+    color: $feed-brown;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
   }
 }
 
 .post-map {
   width: 100%;
   height: 100%;
-  border-radius: 24px;
+  border-radius: 20px;
+  z-index: 0;
 
   .post-map__pin {
     background: transparent;
@@ -219,14 +260,18 @@ $feed-brown: #2f2420;
     height: 58px;
     border: none;
     border-radius: 50%;
-    background-color: $feed-beige;
+    background-color: var(--primary);
     color: $feed-brown;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
-    transition: transform 0.12s ease;
-    box-shadow: 0px 0px 5px var(--gray);
+    transition:
+      transform 0.12s ease,
+      background-color 0.12s ease;
+    box-shadow: 0 4px 14px rgba(47, 36, 32, 0.18);
+
     &:active {
       transform: scale(0.94);
+      background-color: var(--secondary);
     }
 
     &--ai {
@@ -234,24 +279,5 @@ $feed-brown: #2f2420;
       font-size: 20px;
       font-weight: 700;
     }
-  }
-}
-
-.pill-bar {
-  position: relative;
-  width: 329px;
-  max-width: 100%;
-  height: 62px;
-  border-radius: 31px;
-  background-color: $feed-beige;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &__knob {
-    width: 120px;
-    height: 42px;
-    border-radius: 21px;
-    background-color: $feed-taupe;
   }
 }

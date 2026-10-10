@@ -37,6 +37,19 @@ const Feed = () => {
 
   const currentPost = posts[activeIndex];
 
+  if (posts.length === 0) {
+    return (
+      <div className="feed">
+        <p className="feed__state">
+          {context?.loading
+            ? "Ładowanie plakatów…"
+            : context?.error
+              ? "Nie udało się pobrać wydarzeń"
+              : "Brak wydarzeń"}
+        </p>
+      </div>
+    );
+  }
   return (
     <div className="feed">
       <Swiper
@@ -77,8 +90,12 @@ const Feed = () => {
 
       <div className="feed__overlay">
         <div className="feed__dots">
-          <span className={`feed__dot ${!detailsOpen ? "feed__dot--active" : ""}`} />
-          <span className={`feed__dot ${detailsOpen ? "feed__dot--active" : ""}`} />
+          <span
+            className={`feed__dot ${!detailsOpen ? "feed__dot--active" : ""}`}
+          />
+          <span
+            className={`feed__dot ${detailsOpen ? "feed__dot--active" : ""}`}
+          />
         </div>
 
         {currentPost && <ActionButtons post={currentPost} />}
