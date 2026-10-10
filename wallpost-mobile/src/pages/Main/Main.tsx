@@ -6,7 +6,6 @@ import { PostsContext } from "../../context/Posts/PostsContext";
 
 const Main = () => {
   const posts = useContext(PostsContext)?.posts ?? [];
-  console.log(posts);
   return (
     <div className="page page-main">
       <div className="inner-page">

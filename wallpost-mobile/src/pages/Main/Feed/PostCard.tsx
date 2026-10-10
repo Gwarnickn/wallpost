@@ -15,13 +15,22 @@ interface PostCardProps {
   activeTomato: boolean;
 }
 
-const PostCard = ({ post, isActive, onDetailsChange, activeTomato }: PostCardProps) => {
+const PostCard = ({
+  post,
+  isActive,
+  onDetailsChange,
+  activeTomato,
+}: PostCardProps) => {
   const swiperRef = useRef<SwiperClass | null>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [saved, setSaved] = useState<boolean>(() =>
     JSON.parse(localStorage.getItem("savedPosts") ?? "[]").includes(post.id),
   );
   const [likes, setLikes] = useState(post.likes);
+
+  useEffect(() => {
+    setLikes(post.likes);
+  }, [post.likes]);
 
   // "Dziś" / "Jutro" / "za 3 dni"
   const start = DateTime.fromISO(post.startDate);
@@ -88,13 +97,12 @@ const PostCard = ({ post, isActive, onDetailsChange, activeTomato }: PostCardPro
         }}
         onSlideChange={handleChange}
       >
-          <SwiperSlide className="post-card__panel">
-            <PosterPanel post={post} onSave={save} />
-            
-          </SwiperSlide>
-          <SwiperSlide className="post-card__panel">
-            <DetailsPanel post={post} active={isActive && detailsOpen} />
-          </SwiperSlide>
+        <SwiperSlide className="post-card__panel">
+          <PosterPanel post={post} onSave={save} />
+        </SwiperSlide>
+        <SwiperSlide className="post-card__panel">
+          <DetailsPanel post={post} active={isActive && detailsOpen} />
+        </SwiperSlide>
       </Swiper>
       {/* pod plakatem, poza przesuwaną częścią - zawsze widoczne */}
       <div className="post-card__info">

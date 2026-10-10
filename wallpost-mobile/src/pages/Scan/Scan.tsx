@@ -99,7 +99,6 @@ const Scan = () => {
       setStatus("ready");
     }
   };
-  console.log(duplicate);
 
   return (
     <div className="scan">

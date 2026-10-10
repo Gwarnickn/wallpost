@@ -1,4 +1,12 @@
-import { useEffect, useMemo, useRef, useState, type UIEvent } from "react";
+import {
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type UIEvent,
+} from "react";
+import { PostsContext } from "../../context/Posts/PostsContext";
 import { useSearchParams } from "react-router-dom";
 import L from "leaflet";
 import "leaflet.markercluster";
@@ -43,6 +51,7 @@ const MapPage = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
   const activeCard = useRef(0);
+  const context = useContext(PostsContext);
   const [posts, setPosts] = useState<Post[]>([]);
   const [selected, setSelected] = useState<Post | null>(null);
   const [me, setMe] = useState<L.LatLng | null>(null);
@@ -216,6 +225,7 @@ const MapPage = () => {
       : [...saved, post.id];
     setSaved(next);
     localStorage.setItem("savedPosts", JSON.stringify(next));
+    context?.fetchPosts();
   };
 
   // rzut pomidorem = "ten plakat wygląda na AI"; raz na plakat
@@ -231,6 +241,7 @@ const MapPage = () => {
     const next = [...slopped, post.id];
     setSlopped(next);
     localStorage.setItem("slopPosts", JSON.stringify(next));
+    context?.fetchPosts();
   };
 
   const distance =
