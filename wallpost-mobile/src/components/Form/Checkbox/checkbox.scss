@@ -1,0 +1,39 @@
+@use "@/styles/variables" as *;
+@use "@/styles/breakpoints" as *;
+
+.checkbox-wrapper{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+    align-items: center;
+    cursor: pointer;
+    gap: 8px;
+    font-size: $font-size-6;
+    user-select: none;
+    input{
+        all: unset;
+        min-width: 24px;
+        height: 24px;
+        border-radius: 8px;
+        transition: all 0.25s;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: transparent;
+        font-size: $font-size-5;
+        border: 1px solid var(--white-op50);
+        &::before{
+            transition: all 0.25s;
+            content: '✓';
+            color: var(--white-op50);
+        }
+    }
+    .checked{
+        border: 1px solid var(--white);
+        background-color: var(--white);
+        &::before{
+            content: '✓';
+            color: var(--black) !important;
+        }
+    }
+}

@@ -1,0 +1,34 @@
+@use "@/styles/colors" as *;
+@use "@/styles/font" as *;
+
+$font-size-title: 78px;
+$font-size-1: 32px;
+$font-size-2: 24px;
+$font-size-3: 20px;
+$font-size-4: 16px;
+$font-size-5: 14px;
+$font-size-6: 12px;
+
+$primary-font: "Inter", sans-serif;
+$title-font: "Cinzel", sans-serif;
+
+body,
+body.black-theme {
+  --black: var(--g-black);
+  --black-2: var(--g-black-2);
+  --black-3: var(--g-black-3);
+
+  --white: var(--g-white);
+  --white-op90: var(--g-white-op90);
+  --white-op70: var(--g-white-op70);
+  --white-op50: var(--g-white-op50);
+  --white-op30: var(--g-white-op30);
+  --white-op20: var(--g-white-op20);
+  --white-op10: var(--g-white-op10);
+
+  --primary: var(--g-primary);
+  --primary-op50: var(--g-primary-op50);
+  --gray: var(--g-gray);
+  --dark-gray: var(--g-dark-gray);
+  --dark-gray-op90: var(--g-dark-gray-op90);
+}

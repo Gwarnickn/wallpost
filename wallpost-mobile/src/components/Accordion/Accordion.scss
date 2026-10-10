@@ -1,0 +1,40 @@
+.accordion-wrapper {
+  width: 100%;
+  transition: all 2s ease;
+  .accordion-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 0px 20px;
+    .header-line {
+      flex-grow: 1;
+      height: 2px;
+      border-radius: 2px;
+      background-color: rgba(253, 253, 253, 0.199);
+    }
+    p {
+      width: max-content;
+      flex-shrink: 0;
+      margin: 4px 0;
+    }
+  }
+
+  .accordion-collapse {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: all 0.5s;
+    overflow: hidden;
+    box-sizing: border-box;
+    padding: 0;
+    .accordion-body {
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+  }
+  &.open .accordion-collapse {
+    grid-template-rows: 1fr;
+    padding: 12px 0;
+  }
+}

@@ -1,0 +1,52 @@
+import type { AxiosError } from "axios";
+import api from "./api";
+import { SecureStorage } from '@aparajita/capacitor-secure-storage';
+
+const REFRESH_TOKEN_KEY = 'refresh_token';
+
+let accessToken: string | null = null;
+let isRefreshing: boolean = false;
+
+const getConfig = () => {
+  return {
+    headerWithoutAuth: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE",
+    },
+    headerWithAuth: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  };
+};
+
+
+
+const ApiService = {
+  URL: import.meta.env.VITE_API_LINK,
+
+  //How get should look like
+  async me() {
+    const response = await api.get(this.URL + `/auth/me`, { headers: getConfig().headerWithAuth });
+    return response.data;
+  },
+
+  //How post should look like
+  async login(email: string, password: string) {
+    const response = await api
+      .post(this.URL + "/auth/login",{
+          email: email,
+          password: password,
+        },
+        { headers: getConfig().headerWithoutAuth },
+      )
+    const { data } = response;
+    await this.setTokes(data.token,data.refreshToken);
+    delete data.token;
+    delete data.refreshToken;
+    return data;
+  },
+};
+
+export default ApiService;

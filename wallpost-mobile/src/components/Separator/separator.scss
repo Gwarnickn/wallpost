@@ -1,0 +1,20 @@
+@use "@/styles/variables" as *;
+@use '@/styles/breakpoints' as *;
+
+.separator{
+    width: 100%;
+    display: flex;
+    margin-top: 8px;
+    gap: 8px;
+    height: 1px;
+    align-items: center;
+    .line{
+        height: 1px;
+        width: 100%;
+        background-color: white;
+        background-color: var(--white-op50);
+    }
+    .text{
+        color: var(--white-op70)
+    }
+}

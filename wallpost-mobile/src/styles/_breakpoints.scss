@@ -1,0 +1,91 @@
+@mixin breakpoint($point, $orientation: "") {
+  @if $point == desktop {
+    @media (min-width: 1441px) {
+      @content;
+    }
+  } @else if $point == laptop {
+    @if $orientation == landscape {
+      @media (max-width: 1440px) and (orientation: landscape) {
+        @content;
+      }
+    } @else if $orientation == portrait {
+      @media (max-width: 1440px) and (orientation: portrait) {
+        @content;
+      }
+    } @else {
+      @media (max-width: 1440px) {
+        @content;
+      }
+    }
+  } @else if $point == tablet {
+    @if $orientation == landscape {
+      @media (max-width: 1024px) and (orientation: landscape) {
+        @content;
+      }
+    } @else if $orientation == portrait {
+      @media (max-width: 1024px) and (orientation: portrait) {
+        @content;
+      }
+    } @else {
+      @media (max-width: 1024px) {
+        @content;
+      }
+    }
+  } @else if $point == mobile_large {
+    @if $orientation == landscape {
+      @media (max-width: 768px) and (orientation: landscape) {
+        @content;
+      }
+    } @else if $orientation == portrait {
+      @media (max-width: 768px) and (orientation: portrait) {
+        @content;
+      }
+    } @else {
+      @media (max-width: 768px) {
+        @content;
+      }
+    }
+  } @else if $point == mobile_medium {
+    @if $orientation == landscape {
+      @media (max-width: 425px) and (orientation: landscape) {
+        @content;
+      }
+    } @else if $orientation == portrait {
+      @media (max-width: 425px) and (orientation: portrait) {
+        @content;
+      }
+    } @else {
+      @media (max-width: 425px) {
+        @content;
+      }
+    }
+  } @else if $point == mobile_small {
+    @if $orientation == landscape {
+      @media (max-width: 373px) and (orientation: landscape) {
+        @content;
+      }
+    } @else if $orientation == portrait {
+      @media (max-width: 373px) and (orientation: portrait) {
+        @content;
+      }
+    } @else {
+      @media (max-width: 373px) {
+        @content;
+      }
+    }
+  } @else if $point == mobile_xs {
+    @if $orientation == landscape {
+      @media (max-width: 320px) and (orientation: landscape) {
+        @content;
+      }
+    } @else if $orientation == portrait {
+      @media (max-width: 320px) and (orientation: portrait) {
+        @content;
+      }
+    } @else {
+      @media (max-width: 320px) {
+        @content;
+      }
+    }
+  }
+}

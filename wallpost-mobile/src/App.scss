@@ -1,0 +1,118 @@
+@use '@/styles/variables' as *;
+@use '@/styles/breakpoints' as *;
+
+
+body{
+  margin: 0px;
+  color: var(--white);
+  font-family: $primary-font;
+  background-color: var(--black);
+}
+
+
+.app{
+  display: grid;
+  .background{
+    background-color: var(--black);
+    grid-area: 1/1/1/1;
+  }
+  .foreground{
+    z-index: 100;
+    grid-area: 1/1/1/1;
+  }
+}
+
+.fallback{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--black);
+  z-index: 1000;
+  transform: translate(-50%,-50%);
+  pointer-events: none;
+}
+
+.fallback-hide{
+  animation: fallbackHide 0.33s 0.1s ease-in-out forwards;
+}
+
+@keyframes fallbackHide {
+  0%{
+    opacity: 1;
+  }
+  100%{
+    opacity: 0;
+  }
+}
+
+.h1 {
+  font-size: $font-size-1;
+  font-weight: var(--font-weight-bold);
+  line-height: 120%;
+  letter-spacing: -0.5px;
+}
+
+.h2 {
+  font-size: $font-size-2;
+  font-weight: var(--font-weight-bold);
+  line-height: 125%;
+}
+
+.h3 {
+  font-size: $font-size-3;
+  font-weight: var(--font-weight-medium);
+  line-height: 130%;
+}
+
+.body {
+  font-size: $font-size-4;
+  font-weight: var(--font-weight-regular);
+  line-height: 150%;
+}
+
+.caption {
+  font-size: $font-size-5 !important;
+  font-weight: var(--font-weight-regular) !important;
+  line-height: 140% !important;
+}
+
+.overline {
+  font-size: $font-size-6;
+  font-weight: var(--font-weight-medium);
+  line-height: 140%;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.error-message{
+  color: red !important;
+  margin: 2px;
+  font-size: $font-size-6; 
+}
+
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.4s;
+  animation-timing-function: ease-in-out;
+}
+
+::view-transition-new(root) {
+  animation-name: wjazd-z-prawej;
+}
+
+::view-transition-old(root) {
+  animation-name: wyjazd-w-lewo;
+}
+
+@keyframes wjazd-z-prawej {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes wyjazd-w-lewo {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(-100%); opacity: 0; }
+}

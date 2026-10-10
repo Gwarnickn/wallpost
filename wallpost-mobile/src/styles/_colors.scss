@@ -1,0 +1,23 @@
+body {
+  --g-black: #000000;
+
+  --g-white: rgba(255, 255, 255, 1);
+  --g-white-op90: rgba(255, 255, 255, 0.9);
+  --g-white-op70: rgba(255, 255, 255, 0.7);
+  --g-white-op50: rgba(255, 255, 255, 0.5);
+  --g-white-op30: rgba(255, 255, 255, 0.3);
+  --g-white-op20: rgba(255, 255, 255, 0.2);
+  --g-white-op10: rgba(255, 255, 255, 0.1);
+
+  --g-primary: rgb(255, 86, 34);
+  --g-primary-op50: rgba(255, 86, 34, 0.5);
+
+  --g-black-3: rgb(30, 30, 30);
+  --g-black-2: rgb(22, 22, 22);
+  --g-gray: rgb(170, 170, 170);
+  --g-dark-gray: rgb(44, 44, 44);
+  --g-dark-gray-op90: rgb(44, 44, 44, 0.9);
+
+  --radius-lg: 16px;
+  --radius-md: 12px;
+}

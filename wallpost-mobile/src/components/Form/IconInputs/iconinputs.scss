@@ -1,0 +1,10 @@
+.iconinputs {
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  gap: 8px;
+  width: 100%;
+  .icon {
+    margin-bottom: calc((48px - 24px) / 2);
+  }
+}
