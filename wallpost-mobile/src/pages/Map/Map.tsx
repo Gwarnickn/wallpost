@@ -312,7 +312,7 @@ const MapPage = () => {
                 ♥ {selected.likes}
               </button>
               <button
-                className={slopped.includes(selected.id) ? "tomato" : ""}
+                className={slopped.includes(selected.id) ? "tomato-thrown" : ""}
                 onClick={() => throwTomato(selected)}
               >
                 🍅 {selected.slop}
