@@ -173,10 +173,9 @@ $scan-brown: #2f2420;
   }
 
   &__error {
-    margin: 0;
-    padding: 12px 14px;
+    margin: 8px 0 32px 0;
+    padding: 0px 14px;
     border-radius: 14px;
-    background-color: var(--primary);
     color: #b42318;
     font-size: 14px;
     line-height: 140%;

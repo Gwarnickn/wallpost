@@ -49,6 +49,11 @@ const Scan = () => {
     setStatus("scanning");
     try {
       const result = await ApiService.scanPoster(photo);
+      if (result.isPoster === false) {
+        setError("To nie wygląda na plakat wydarzenia. Zrób zdjęcie plakatu.");
+        setStatus("idle");
+        return;
+      }
       setForm({ ...EMPTY, ...result });
       setDuplicate(result.duplicate ?? null);
     } catch (scanError) {
@@ -95,7 +100,10 @@ const Scan = () => {
       navigate(`/map?post=${created.id}`);
     } catch (saveError) {
       console.error(saveError);
-      setError("Nie udało się dodać wydarzenia.");
+      const reason = (
+        saveError as { response?: { data?: { message?: string } } }
+      ).response?.data?.message;
+      setError(reason ?? "Nie udało się dodać wydarzenia.");
       setStatus("ready");
     }
   };
@@ -106,6 +114,7 @@ const Scan = () => {
       <p className="scan__lead">
         Zrób zdjęcie, a tytuł, datę i miejsce uzupełnimy za Ciebie.
       </p>
+      {error && <p className="scan__error">{error}</p>}
 
       <div className="scan__poster">
         {status === "idle" ? (
@@ -153,8 +162,6 @@ const Scan = () => {
       )}
       {(status === "ready" || status === "saving") && !duplicate && (
         <div className="scan__form">
-          {error && <p className="scan__error">{error}</p>}
-
           <label>
             Tytuł
             <input
