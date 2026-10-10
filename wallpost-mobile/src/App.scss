@@ -12,6 +12,7 @@ body{
 
 .app{
   display: grid;
+  height: 100vh;
   .background{
     background-color: var(--black);
     grid-area: 1/1/1/1;

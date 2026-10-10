@@ -1,0 +1,257 @@
+@use "@/styles/variables" as *;
+@use "@/styles/breakpoints" as *;
+
+// Feed-local palette (warm beige / taupe / dark brown).
+$feed-bg: #ffffff;
+$feed-beige: #ede5df;
+$feed-taupe: #c9b0a3;
+$feed-brown: #2f2420;
+
+.feed {
+  --feed-peek: calc(50px + var(--navigation-bar-height));
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #FEFEFF;
+  color: $feed-brown;
+
+  &__swiper {
+    width: 100%;
+    height: 100%;
+  }
+
+  &__slide {
+    position: relative;
+    width: 100%;
+    height: calc(100% - var(--feed-peek));
+    overflow: hidden;
+
+    // The upcoming poster is blurred/faded while it peeks.
+    &.swiper-slide-next {
+      filter: blur(6px) brightness(0.9);
+      opacity: 0.7;
+    }
+
+    // Only the visible card should react to gestures.
+    &:not(.swiper-slide-active) {
+      pointer-events: none;
+    }
+  }
+
+  &__slide-placeholder {
+    width: 100%;
+    height: 100%;
+    background-color: $feed-bg;
+  }
+
+  // Fades the top of the peeking poster so it reads as "more below".
+  &__bottom-fade {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: var(--feed-peek);
+    z-index: 10;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.9) 0%,
+      rgba(255, 255, 255, 0) 30%,
+      rgba(255, 255, 255, 0) 100%
+    );
+  }
+
+  &__overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: calc(75px + 32px + var(--navigation-bar-height));
+    pointer-events: none;
+
+    > * {
+      pointer-events: auto;
+    }
+  }
+
+  &__dots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  &__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: $feed-taupe;
+    opacity: 0.5;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    &--active {
+      opacity: 1;
+      transform: scale(1.2);
+      background-color: $feed-brown;
+    }
+  }
+}
+
+.post-card {
+  width: calc(100% - 16px);
+  height: 75%;
+  margin-bottom: 25%;
+  padding: 0px 8px 0px 8px;
+  &__swiper {
+    width: 100%;
+    height: 100%;
+  }
+
+  &__panel {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+}
+
+.poster-panel {
+  width: 100%;
+  height: 100%;
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+}
+
+.details-panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding: calc(24px + env(safe-area-inset-top)) 20px
+    calc(24px + env(safe-area-inset-bottom));
+  gap: 20px;
+  background-color: $feed-bg;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-height: 0;
+  }
+
+  &__title {
+    margin: 0;
+    font-family: $primary-font;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 115%;
+    color: $feed-brown;
+  }
+
+  &__fields {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &__field {
+    margin: 0;
+    font-size: 16px;
+    line-height: 150%;
+    color: $feed-brown;
+  }
+
+  &__label {
+    font-weight: 700;
+  }
+
+  &__value {
+    font-weight: 400;
+  }
+
+  &__map {
+    margin-top: auto;
+    width: 100%;
+    height: 220px;
+    border-radius: 24px;
+    overflow: hidden;
+  }
+}
+
+.post-map {
+  width: 100%;
+  height: 100%;
+  border-radius: 24px;
+
+  .post-map__pin {
+    background: transparent;
+    border: none;
+  }
+
+  .leaflet-control-attribution {
+    font-size: 9px;
+    background: rgba(255, 255, 255, 0.7);
+  }
+}
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+
+  &__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 58px;
+    height: 58px;
+    border: none;
+    border-radius: 50%;
+    background-color: $feed-beige;
+    color: $feed-brown;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.12s ease;
+    box-shadow: 0px 0px 5px var(--gray);
+    &:active {
+      transform: scale(0.94);
+    }
+
+    &--ai {
+      font-family: $primary-font;
+      font-size: 20px;
+      font-weight: 700;
+    }
+  }
+}
+
+.pill-bar {
+  position: relative;
+  width: 329px;
+  max-width: 100%;
+  height: 62px;
+  border-radius: 31px;
+  background-color: $feed-beige;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &__knob {
+    width: 120px;
+    height: 42px;
+    border-radius: 21px;
+    background-color: $feed-taupe;
+  }
+}

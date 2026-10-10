@@ -1,6 +1,7 @@
 import { RouterProvider } from 'react-router-dom'
 import './App.scss'
 import { appRoutes } from './routes'
+import { PostsProvider } from './context/Posts/PostsProvider'
 import { setupIonicReact } from '@ionic/react';
 import { useEffect } from 'react';
 import { StatusBar, Style } from '@capacitor/status-bar';
@@ -39,7 +40,9 @@ function App() {
 
   return (
     <div className='app'>
-      <RouterProvider router={appRoutes}/>
+      <PostsProvider>
+        <RouterProvider router={appRoutes}/>
+      </PostsProvider>
     </div>
   )
 }

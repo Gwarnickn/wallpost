@@ -1,6 +1,6 @@
 import type { AxiosError } from "axios";
 import api from "./api";
-import { SecureStorage } from "@aparajita/capacitor-secure-storage";
+import { SecureStorage } from '@aparajita/capacitor-secure-storage';
 
 const REFRESH_TOKEN_KEY = "refresh_token";
 
@@ -38,15 +38,16 @@ const ApiService = {
   URL: import.meta.env.VITE_API_LINK,
 
   //How get should look like
+  async getPosts(): Promise<Post[]> {
+    console.log(this.URL)
+    const response = await api.get(this.URL + `/posts`, { headers: getConfig().headerWithoutAuth });
+    return response.data;
+  },
+
   async me() {
     const response = await api.get(this.URL + `/auth/me`, {
       headers: getConfig().headerWithAuth,
     });
-    return response.data;
-  },
-
-  async getPosts(): Promise<Post[]> {
-    const response = await api.get(this.URL + "/posts");
     return response.data;
   },
 

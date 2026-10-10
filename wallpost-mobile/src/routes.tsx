@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import { BackOverrider } from "./context/BackOverrider/BackOverrider";
 import Main from "./pages/Main/Main";
 import MapPage from "./pages/Map/Map";
+import Feed from "./pages/Main/Feed/Feed";
 
 export const appRoutes = createBrowserRouter([
   {
@@ -12,8 +13,8 @@ export const appRoutes = createBrowserRouter([
         element: <Main />,
         children: [
           {
-            path: "feed",
-            element: <div>feed</div>,
+            path: 'feed',
+            element: <Feed/>
           },
           {
             path: "map",

@@ -3,15 +3,15 @@
 
 .page-main {
   width: 100vw;
-  height: calc(100vh - 73px + var(--navigation-bar-height) * 2);
+  height: 100vh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
 .inner-page {
-  flex: 1;
   overflow-y: auto;
+  height: 100%;
   .sub-page {
     height: 100%;
   }
