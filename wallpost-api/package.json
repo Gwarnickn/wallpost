@@ -10,7 +10,7 @@
     "build": "nest build",
     "deploy": "nest deploy",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start",
+    "start": "nest start --env-file .env",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
@@ -29,8 +29,8 @@
     "@nestjs/jwt": "^11.0.2",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/swagger": "^11.4.6",
-    "@prisma/client": "^7.10.0",
     "@prisma/adapter-pg": "^7.10.0",
+    "@prisma/client": "^7.10.0",
     "@supabase/supabase-js": "^2.117.2",
     "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",
@@ -70,6 +70,7 @@
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.7.3",
-    "typescript-eslint": "^8.20.0"
+    "typescript-eslint": "^8.20.0",
+    "vitest": "^5.0.3"
   }
 }
