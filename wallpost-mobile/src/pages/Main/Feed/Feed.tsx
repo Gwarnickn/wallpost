@@ -18,6 +18,7 @@ const Feed = () => {
   const previousIndex = useRef(0);
   const [activeIndex, setActiveIndex] = useState(0);
   const [detailsOpen, setDetailsOpen] = useState(false);
+  const [activeTomato, setActiveTomato] = useState("null"); 
 
   const handleSlideChange = useCallback((swiper: SwiperClass) => {
     const next = swiper.activeIndex;
@@ -40,6 +41,15 @@ const Feed = () => {
 
   const currentPost = posts[activeIndex];
 
+  const activateTomato = async () => {
+    if(activeTomato === "null"){
+      setActiveTomato(currentPost.id);
+      setTimeout(() => {
+        setActiveTomato('null');
+      },1800);
+    }
+  }
+
   if (posts.length === 0) {
     return (
       <div className="feed">
@@ -53,6 +63,8 @@ const Feed = () => {
       </div>
     );
   }
+
+
   return (
     <div className="feed">
       <button
@@ -89,6 +101,7 @@ const Feed = () => {
                   post={post}
                   isActive={index === activeIndex}
                   onDetailsChange={handleDetailsChange}
+                  activeTomato={post.id === activeTomato}
                 />
               ) : (
                 <div className="feed__slide-placeholder" />
@@ -108,7 +121,7 @@ const Feed = () => {
           />
         </div>
 
-        {currentPost && <ActionButtons post={currentPost} />}
+        {currentPost && <ActionButtons post={currentPost} activateTomato={activateTomato} />}
       </div>
     </div>
   );

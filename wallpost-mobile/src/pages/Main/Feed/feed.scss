@@ -416,3 +416,13 @@ $feed-brown: #2f2420;
     }
   }
 }
+
+
+.tomato{
+    z-index: 100;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    transform: translate(0px, -12.5%);
+    object-fit: contain;
+}

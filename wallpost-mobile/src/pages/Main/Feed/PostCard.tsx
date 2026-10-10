@@ -12,9 +12,10 @@ interface PostCardProps {
   post: Post;
   isActive: boolean;
   onDetailsChange: (open: boolean) => void;
+  activeTomato: boolean;
 }
 
-const PostCard = ({ post, isActive, onDetailsChange }: PostCardProps) => {
+const PostCard = ({ post, isActive, onDetailsChange, activeTomato }: PostCardProps) => {
   const swiperRef = useRef<SwiperClass | null>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [saved, setSaved] = useState<boolean>(() =>
@@ -68,6 +69,7 @@ const PostCard = ({ post, isActive, onDetailsChange }: PostCardProps) => {
 
   return (
     <div className="post-card">
+      {activeTomato ? <img className="tomato" src="tomato.gif" alt="" /> : ""}
       <Swiper
         className="post-card__swiper"
         direction="horizontal"
@@ -86,14 +88,14 @@ const PostCard = ({ post, isActive, onDetailsChange }: PostCardProps) => {
         }}
         onSlideChange={handleChange}
       >
-        <SwiperSlide className="post-card__panel">
-          <PosterPanel post={post} onSave={save} />
-        </SwiperSlide>
-        <SwiperSlide className="post-card__panel">
-          <DetailsPanel post={post} active={isActive && detailsOpen} />
-        </SwiperSlide>
+          <SwiperSlide className="post-card__panel">
+            <PosterPanel post={post} onSave={save} />
+            
+          </SwiperSlide>
+          <SwiperSlide className="post-card__panel">
+            <DetailsPanel post={post} active={isActive && detailsOpen} />
+          </SwiperSlide>
       </Swiper>
-
       {/* pod plakatem, poza przesuwaną częścią - zawsze widoczne */}
       <div className="post-card__info">
         <strong>{post.title}</strong>

@@ -26,9 +26,10 @@ const TomatoIcon = () => (
 
 interface ActionButtonsProps {
   post: Post;
+  activateTomato: () => void;
 }
 
-const ActionButtons = ({ post }: ActionButtonsProps) => {
+const ActionButtons = ({ post, activateTomato }: ActionButtonsProps) => {
   return (
     <div className="action-buttons">
       <button
@@ -44,9 +45,9 @@ const ActionButtons = ({ post }: ActionButtonsProps) => {
         type="button"
         className="action-buttons__button"
         aria-label="Rzuć pomidorem"
-        onClick={() => console.log("rzucono pomidorem")}
+        onClick={activateTomato}
       >
-        <TomatoIcon />
+        🍅 
       </button>
 
       <button
