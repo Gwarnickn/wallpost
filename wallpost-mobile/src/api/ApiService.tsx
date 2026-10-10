@@ -1,6 +1,6 @@
 import type { AxiosError } from "axios";
 import api from "./api";
-import { SecureStorage } from '@aparajita/capacitor-secure-storage';
+import { SecureStorage } from "@aparajita/capacitor-secure-storage";
 
 const REFRESH_TOKEN_KEY = "refresh_token";
 
@@ -39,8 +39,10 @@ const ApiService = {
 
   //How get should look like
   async getPosts(): Promise<Post[]> {
-    console.log(this.URL)
-    const response = await api.get(this.URL + `/posts`, { headers: getConfig().headerWithoutAuth });
+    console.log(this.URL);
+    const response = await api.get(this.URL + `/posts`, {
+      headers: getConfig().headerWithoutAuth,
+    });
     return response.data;
   },
 
@@ -62,6 +64,16 @@ const ApiService = {
   },
   async slopPost(id: string): Promise<Post> {
     const response = await api.patch(this.URL + `/posts/slop/${id}`);
+    return response.data;
+  },
+
+  async scanPoster(image: string) {
+    const response = await api.post(this.URL + `/posts/scan`, { image });
+    return response.data;
+  },
+
+  async createPost(post: Omit<Post, "id" | "likes" | "slop">): Promise<Post> {
+    const response = await api.post(this.URL + `/posts`, post);
     return response.data;
   },
 

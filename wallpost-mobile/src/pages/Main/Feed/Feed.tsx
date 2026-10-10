@@ -6,10 +6,13 @@ import { PostsContext } from "../../../context/Posts/PostsContext";
 import PostCard from "./PostCard";
 import ActionButtons from "./ActionButtons";
 import "./feed.scss";
+import { useNavigate } from "react-router-dom";
+import CameraIcon from "../../Scan/CameraIcon";
 
 const Feed = () => {
   const context = useContext(PostsContext);
   const posts = context?.posts ?? [];
+  const navigate = useNavigate();
 
   const outerSwiper = useRef<SwiperClass | null>(null);
   const previousIndex = useRef(0);
@@ -52,6 +55,13 @@ const Feed = () => {
   }
   return (
     <div className="feed">
+      <button
+        className="feed__scan"
+        onClick={() => navigate("/scan")}
+        aria-label="Zeskanuj plakat"
+      >
+        <CameraIcon />
+      </button>
       <Swiper
         className="feed__swiper"
         direction="vertical"

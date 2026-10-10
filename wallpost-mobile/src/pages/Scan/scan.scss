@@ -1,0 +1,219 @@
+$scan-brown: #2f2420;
+
+.scan {
+  box-sizing: border-box;
+  min-height: 100%;
+  // miejsce na pasek statusu u góry i pływający navbar na dole
+  padding: calc(var(--status-bar-height, 0px) + 24px) 16px
+    calc(120px + var(--navigation-bar-height, 0px) * 2);
+  background-color: #fefeff;
+  color: $scan-brown;
+
+  &__heading {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 120%;
+    letter-spacing: -0.5px;
+  }
+
+  &__lead {
+    margin: 6px 0 28px;
+    font-size: 15px;
+    line-height: 140%;
+    color: var(--secondary);
+  }
+
+  // plakat przyklejony taśmą, tak jak w feedzie
+  &__poster {
+    position: relative;
+
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      top: -9px;
+      z-index: 1;
+      width: 72px;
+      height: 22px;
+      background-color: rgba(189, 162, 139, 0.6);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      pointer-events: none;
+    }
+
+    &::before {
+      left: 24px;
+      rotate: -8deg;
+    }
+
+    &::after {
+      right: 24px;
+      rotate: 6deg;
+    }
+  }
+
+  &__frame {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-radius: 24px;
+    background-color: var(--primary);
+
+    img {
+      display: block;
+      width: 100%;
+      max-height: 340px;
+      object-fit: contain;
+    }
+  }
+
+  // pusty plakat z przyciskiem aparatu
+  &__frame--empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    height: 340px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  // okrągły przycisk jak przyciski akcji w feedzie
+  &__camera {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    box-shadow: 0 4px 14px rgba(47, 36, 32, 0.18);
+  }
+
+  // w trakcie odczytu zdjęcie spokojnie pulsuje
+  &__frame--scanning img {
+    animation: scanPulse 1s ease-in-out infinite alternate;
+  }
+
+  &__status {
+    position: absolute;
+    left: 50%;
+    bottom: 16px;
+    translate: -50% 0;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background-color: var(--secondary);
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 24px;
+
+    label {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      color: var(--secondary);
+    }
+
+    input,
+    textarea {
+      box-sizing: border-box;
+      width: 100%;
+      min-width: 0;
+      padding: 12px 14px;
+      border: none;
+      border-radius: 14px;
+      outline: none;
+      background-color: var(--primary);
+      color: $scan-brown;
+      font: inherit;
+      font-size: 16px;
+      font-weight: 400;
+      letter-spacing: 0;
+      resize: none;
+
+      &:focus {
+        box-shadow: 0 0 0 2px var(--secondary);
+      }
+    }
+  }
+
+  // początek i koniec obok siebie
+  &__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  &__place {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 16px;
+
+    span {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      color: var(--secondary);
+    }
+  }
+
+  &__error {
+    margin: 0;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background-color: var(--primary);
+    color: #b42318;
+    font-size: 14px;
+    line-height: 140%;
+  }
+
+  &__save,
+  &__retry {
+    padding: 16px;
+    border: none;
+    border-radius: 999px;
+    font: inherit;
+    font-size: 16px;
+    font-weight: 600;
+
+    &:disabled {
+      opacity: 0.5;
+    }
+  }
+
+  &__save {
+    margin-top: 8px;
+    background-color: $scan-brown;
+    color: #ffffff;
+  }
+
+  &__retry {
+    padding: 8px;
+    background-color: transparent;
+    color: var(--secondary);
+  }
+}
+
+@keyframes scanPulse {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.45;
+  }
+}

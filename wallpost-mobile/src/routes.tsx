@@ -3,6 +3,7 @@ import { BackOverrider } from "./context/BackOverrider/BackOverrider";
 import Main from "./pages/Main/Main";
 import MapPage from "./pages/Map/Map";
 import Feed from "./pages/Main/Feed/Feed";
+import Scan from "./pages/Scan/Scan";
 
 export const appRoutes = createBrowserRouter([
   {
@@ -13,8 +14,8 @@ export const appRoutes = createBrowserRouter([
         element: <Main />,
         children: [
           {
-            path: 'feed',
-            element: <Feed/>
+            path: "feed",
+            element: <Feed />,
           },
           {
             path: "map",
@@ -23,6 +24,10 @@ export const appRoutes = createBrowserRouter([
           {
             path: "profile",
             element: <div>profile</div>,
+          },
+          {
+            path: "scan",
+            element: <Scan />,
           },
         ],
       },
