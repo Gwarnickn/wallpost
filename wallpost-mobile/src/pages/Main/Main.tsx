@@ -5,7 +5,7 @@ import { useContext } from "react";
 import { PostsContext } from "../../context/Posts/PostsContext";
 
 const Main = () => {
-  const {posts} = useContext(PostsContext);
+  const posts = useContext(PostsContext)?.posts ?? [];
   console.log(posts);
   return (
     <div className="page page-main">
