@@ -4,6 +4,7 @@ import Main from "./pages/Main/Main";
 import MapPage from "./pages/Map/Map";
 import Feed from "./pages/Main/Feed/Feed";
 import Scan from "./pages/Scan/Scan";
+import Wall from "./pages/Wall/Wall";
 
 export const appRoutes = createBrowserRouter([
   {
@@ -22,12 +23,12 @@ export const appRoutes = createBrowserRouter([
             element: <MapPage />,
           },
           {
-            path: "profile",
-            element: <div>profile</div>,
-          },
-          {
             path: "scan",
             element: <Scan />,
+          },
+          {
+            path: "saved-posts",
+            element: <Wall />,
           },
         ],
       },

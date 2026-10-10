@@ -2,7 +2,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Button from "../Button/Button";
 import "./bottom-bar.scss";
 import type { ReactNode } from "react";
-import { User, ListBulleted, UsersGroup } from "griddy-icons";
+import { User, ListBulleted, UsersGroup, Bookmark } from "griddy-icons";
 
 const bottomBarButtons: {
   id: number;
@@ -24,9 +24,9 @@ const bottomBarButtons: {
   },
   {
     id: 2,
-    icon: <User />,
-    label: "Profile",
-    to: "profile",
+    icon: <Bookmark />,
+    label: "Saved",
+    to: "saved-posts",
   },
 ];
 

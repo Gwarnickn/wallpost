@@ -1,0 +1,136 @@
+$wall-brown: #2f2420;
+
+.wall {
+  position: relative;
+  box-sizing: border-box;
+  overflow: hidden;
+  // korek: ciepłe tło z drobnymi ciemnymi i jasnymi kropkami
+  background-color: #c9a67c;
+  background-image:
+    radial-gradient(rgba(94, 62, 30, 0.28) 1px, transparent 1.6px),
+    radial-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1.6px);
+  background-size:
+    14px 14px,
+    22px 22px;
+  background-position:
+    0 0,
+    7px 11px;
+  box-shadow: inset 0 0 70px rgba(70, 40, 12, 0.4);
+
+  // kartka z tytułem przyklejona taśmą
+  &__heading {
+    position: absolute;
+    top: calc(var(--status-bar-height, 0px) + 28px);
+    left: 50%;
+    translate: -50% 0;
+    rotate: -2deg;
+    margin: 0;
+    padding: 10px 22px;
+    background-color: var(--primary);
+    color: $wall-brown;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    white-space: nowrap;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      translate: -50% 0;
+      rotate: 3deg;
+      width: 64px;
+      height: 20px;
+      background-color: rgba(240, 233, 226, 0.65);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  &__empty {
+    position: absolute;
+    top: calc(var(--status-bar-height, 0px) + 120px);
+    left: 32px;
+    right: 32px;
+    margin: 0;
+    padding: 20px;
+    rotate: 1.5deg;
+    background-color: #fffdf8;
+    color: $wall-brown;
+    font-size: 15px;
+    line-height: 150%;
+    text-align: center;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+  }
+
+  // plakat jak odbitka na białym papierze
+  &__card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: 150px;
+    padding: 6px 6px 8px;
+    background-color: #fffdf8;
+    color: $wall-brown;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+    touch-action: none; // przeciąganie plakatu nie przewija tablicy
+    user-select: none;
+    -webkit-user-select: none;
+    transition: box-shadow 0.15s ease;
+
+    img {
+      display: block;
+      width: 100%;
+      height: 180px;
+      margin-bottom: 4px;
+      object-fit: cover;
+      pointer-events: none;
+    }
+
+    strong {
+      font-size: 12px;
+      line-height: 130%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    small {
+      font-size: 11px;
+      color: var(--secondary);
+    }
+
+    // pinezka
+    &::before {
+      content: "";
+      position: absolute;
+      top: -7px;
+      left: 50%;
+      translate: -50% 0;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #ff8a80, #c62828 60%);
+      box-shadow: 0 3px 4px rgba(0, 0, 0, 0.45);
+    }
+
+    // co drugi i co trzeci plakat ma pinezkę w innym kolorze
+    &:nth-of-type(3n + 1)::before {
+      background: radial-gradient(circle at 35% 30%, #ffe08a, #d39a17 60%);
+    }
+
+    &:nth-of-type(3n + 2)::before {
+      background: radial-gradient(circle at 35% 30%, #9ec5ff, #2459b5 60%);
+    }
+  }
+
+  // plakat podniesiony palcem: prostuje się i rzuca większy cień
+  &__card--held {
+    box-shadow: 0 16px 28px rgba(0, 0, 0, 0.45);
+  }
+}
