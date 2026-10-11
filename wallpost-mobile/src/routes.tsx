@@ -5,6 +5,7 @@ import MapPage from "./pages/Map/Map";
 import Feed from "./pages/Main/Feed/Feed";
 import Scan from "./pages/Scan/Scan";
 import Wall from "./pages/Wall/Wall";
+import Archive from "./pages/Archive/Archive";
 
 export const appRoutes = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ export const appRoutes = createBrowserRouter([
           {
             path: "saved-posts",
             element: <Wall />,
+          },
+          {
+            path: "archive",
+            element: <Archive />,
           },
         ],
       },

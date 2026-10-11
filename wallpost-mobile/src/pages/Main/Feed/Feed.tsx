@@ -18,7 +18,7 @@ const Feed = () => {
   const previousIndex = useRef(0);
   const [activeIndex, setActiveIndex] = useState(0);
   const [detailsOpen, setDetailsOpen] = useState(false);
-  const [activeTomato, setActiveTomato] = useState("null"); 
+  const [activeTomato, setActiveTomato] = useState("null");
 
   const handleSlideChange = useCallback((swiper: SwiperClass) => {
     const next = swiper.activeIndex;
@@ -42,13 +42,13 @@ const Feed = () => {
   const currentPost = posts[activeIndex];
 
   const activateTomato = async () => {
-    if(activeTomato === "null"){
+    if (activeTomato === "null") {
       setActiveTomato(currentPost.id);
       setTimeout(() => {
-        setActiveTomato('null');
-      },1800);
+        setActiveTomato("null");
+      }, 1800);
     }
-  }
+  };
 
   if (posts.length === 0) {
     return (
@@ -64,7 +64,6 @@ const Feed = () => {
     );
   }
 
-
   return (
     <div className="feed">
       <button
@@ -73,6 +72,27 @@ const Feed = () => {
         aria-label="Zeskanuj plakat"
       >
         <CameraIcon />
+      </button>
+      <button
+        className="feed__scan feed__scan--archive"
+        onClick={() => navigate("/archive")}
+        aria-label="Archiwum plakatów"
+      >
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M4 6h16v4H4z" />
+          <path d="M5.5 10v8a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-8" />
+          <path d="M10 14h4" />
+        </svg>
       </button>
       <Swiper
         className="feed__swiper"
@@ -121,7 +141,9 @@ const Feed = () => {
           />
         </div>
 
-        {currentPost && <ActionButtons post={currentPost} activateTomato={activateTomato} />}
+        {currentPost && (
+          <ActionButtons post={currentPost} activateTomato={activateTomato} />
+        )}
       </div>
     </div>
   );
