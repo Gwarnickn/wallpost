@@ -4,6 +4,7 @@ import { appRoutes } from './routes'
 import { PostsProvider } from './context/Posts/PostsProvider'
 import { setupIonicReact } from '@ionic/react';
 import { useEffect } from 'react';
+import { SystemBars, SystemBarsStyle } from '@capacitor/core';
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { SafeArea } from '@aashu-dubey/capacitor-statusbar-safe-area';
 
@@ -18,7 +19,8 @@ function App() {
     const initApp = async () => {
       await Promise.all([
         StatusBar.setOverlaysWebView({ overlay: true }),
-        StatusBar.setStyle({ style: Style.Dark }),
+        StatusBar.setStyle({ style: Style.Light }),
+        SystemBars.setStyle({ style: SystemBarsStyle.Light })
       ]);
     }
     initApp();

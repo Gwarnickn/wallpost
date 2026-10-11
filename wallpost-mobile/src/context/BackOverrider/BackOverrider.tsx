@@ -25,7 +25,7 @@ export const BackOverrider = () => {
         backButtonOverride.current();
         clearOverride();
       }else{
-        if((currentDepthRef.current === 1 && localStorage.getItem("user")) || currentDepthRef.current === 0){
+        if(currentDepthRef.current === 1 || currentDepthRef.current === 0){
           MobileApp.exitApp();
         } else {
           history.goBack();
@@ -38,7 +38,9 @@ export const BackOverrider = () => {
     }
   },[])
 
-
+  useEffect(() => {
+    history.push("feed",false);
+  },[])
 
 
   return (
