@@ -1,10 +1,10 @@
-import { useNavigate } from "react-router-dom";
+import { useHistoryWithDepth } from "../../../hooks/useHistoryWithDepth";
 import { DateTime } from "luxon";
 import type { Post } from "../../../types/post";
 import PostMap from "./PostMap";
 
 const DetailsPanel = ({ post, active }: { post: Post; active: boolean }) => {
-  const navigate = useNavigate();
+  const history = useHistoryWithDepth();
 
   const start = DateTime.fromISO(post.startDate);
   const end = DateTime.fromISO(post.endDate);
@@ -31,7 +31,7 @@ const DetailsPanel = ({ post, active }: { post: Post; active: boolean }) => {
         <button
           type="button"
           className="details-panel__map-button"
-          onClick={() => navigate(`/map?post=${post.id}`)}
+          onClick={() => history.push(`/map?post=${post.id}`)}
         >
           Zobacz na mapie
         </button>

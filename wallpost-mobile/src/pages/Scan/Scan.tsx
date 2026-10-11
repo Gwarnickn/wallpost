@@ -1,5 +1,5 @@
 import { useContext, useState, type ChangeEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { useHistoryWithDepth } from "../../hooks/useHistoryWithDepth";
 import ApiService from "../../api/ApiService";
 import { PostsContext } from "../../context/Posts/PostsContext";
 import CameraIcon from "./CameraIcon";
@@ -16,7 +16,7 @@ const EMPTY = {
 };
 
 const Scan = () => {
-  const navigate = useNavigate();
+  const history = useHistoryWithDepth();
   const context = useContext(PostsContext);
   const [image, setImage] = useState("");
   const [status, setStatus] = useState<
@@ -97,7 +97,8 @@ const Scan = () => {
         lng,
       });
       await context?.fetchPosts();
-      navigate(`/map?post=${created.id}`);
+      // replace: "wstecz" z mapy nie wraca do wysłanego już formularza
+      history.replace(`/map?post=${created.id}`);
     } catch (saveError) {
       console.error(saveError);
       const reason = (
@@ -151,7 +152,7 @@ const Scan = () => {
 
           <button
             className="scan__save"
-            onClick={() => navigate(`/map?post=${duplicate.id}`)}
+            onClick={() => history.push(`/map?post=${duplicate.id}`)}
           >
             Zobacz wydarzenie
           </button>

@@ -1,5 +1,5 @@
 import { useContext, useRef, useState, type PointerEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { useHistoryWithDepth } from "../../hooks/useHistoryWithDepth";
 import { DateTime } from "luxon";
 import { PostsContext } from "../../context/Posts/PostsContext";
 import type { Post } from "../../types/post";
@@ -8,7 +8,7 @@ import "./wall.scss";
 const CARD_WIDTH = 150;
 
 const Wall = () => {
-  const navigate = useNavigate();
+  const history = useHistoryWithDepth();
   const posts = useContext(PostsContext)?.posts ?? [];
   const savedIds: string[] = JSON.parse(
     localStorage.getItem("savedPosts") ?? "[]",
@@ -75,7 +75,7 @@ const Wall = () => {
     setDragging(null);
     if (drag.current.moved)
       localStorage.setItem("wallPositions", JSON.stringify(positions));
-    else navigate(`/map?post=${post.id}`);
+    else history.push(`/map?post=${post.id}`);
   };
 
   // tablica rośnie w dół razem z plakatami

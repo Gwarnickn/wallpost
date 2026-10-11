@@ -7,6 +7,7 @@ import ApiService from "../../../api/ApiService";
 import type { Post } from "../../../types/post";
 import PosterPanel from "./PosterPanel";
 import DetailsPanel from "./DetailsPanel";
+import { useBackOverride } from "../../../hooks/useBackOverride";
 
 interface PostCardProps {
   post: Post;
@@ -67,6 +68,9 @@ const PostCard = ({
     },
     [isActive, onDetailsChange],
   );
+
+  // natywny "wstecz" przy otwartym opisie wraca do plakatu zamiast cofać stronę
+  useBackOverride(isActive && detailsOpen, () => swiperRef.current?.slideTo(0));
 
   // When this card stops being the active one, snap it back to the poster so
   // it is ready the next time the user lands on it.

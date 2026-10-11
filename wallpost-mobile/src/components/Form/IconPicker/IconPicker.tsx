@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import * as GriddyIcons from "griddy-icons";
 import "./iconpicker.scss";
+import { useBackOverride } from "../../../hooks/useBackOverride";
 
 type IconPickerProps = {
   name: string;
@@ -33,6 +34,9 @@ const IconPicker: React.FunctionComponent<IconPickerProps> = ({
   useEffect(() => {
     setSelectedValue(value);
   }, [value]);
+
+  // natywny "wstecz" zamyka listę ikon zamiast cofać stronę
+  useBackOverride(isOpen, () => setIsOpen(false));
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

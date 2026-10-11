@@ -2,12 +2,16 @@ import { useContext, useState } from "react";
 import { DateTime } from "luxon";
 import { PostsContext } from "../../context/Posts/PostsContext";
 import type { Post } from "../../types/post";
+import { useBackOverride } from "../../hooks/useBackOverride";
 import "./archive.scss";
 
 const Archive = () => {
   const posts = useContext(PostsContext)?.posts ?? [];
   const [open, setOpen] = useState<Post | null>(null); // plakat oglądany na pełnym ekranie
   const now = DateTime.now();
+
+  // natywny "wstecz" zamyka podgląd plakatu zamiast cofać stronę
+  useBackOverride(open !== null, () => setOpen(null));
 
   // od najnowszych, pogrupowane miesiącami: { "październik 2026": [...] }
   const groups: Record<string, Post[]> = {};

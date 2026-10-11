@@ -1,10 +1,9 @@
 import { createContext } from "react";
 
 interface BackOverrideContextType {
-  registerOverride: (action: () => void) => void;
-  clearOverride: () => void;
+  // rejestruje akcję pod przycisk "wstecz"; zwraca funkcję, która ją wyrejestrowuje
+  registerOverride: (action: () => void) => () => void;
 }
 
-export const BackOverrideContext = createContext<BackOverrideContextType | null>(null);
-
-
+export const BackOverrideContext =
+  createContext<BackOverrideContextType | null>(null);

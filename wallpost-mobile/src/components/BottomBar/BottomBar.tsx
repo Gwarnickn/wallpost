@@ -1,4 +1,5 @@
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useHistoryWithDepth } from "../../hooks/useHistoryWithDepth";
 import Button from "../Button/Button";
 import "./bottom-bar.scss";
 import type { ReactNode } from "react";
@@ -31,7 +32,7 @@ const bottomBarButtons: {
 ];
 
 const BottomBar = () => {
-  const navigate = useNavigate();
+  const history = useHistoryWithDepth();
   const location = useLocation().pathname;
   const currentButton = Math.max(
     0,
@@ -45,7 +46,7 @@ const BottomBar = () => {
     to: string;
   }) => {
     if (!location.includes(btn.to)) {
-      navigate(btn.to);
+      history.push(`/${btn.to}`);
     }
   };
 
@@ -53,6 +54,7 @@ const BottomBar = () => {
     <div className="bottom-bar">
       {bottomBarButtons.map((btn) => (
         <Button
+          key={btn.id}
           className={`button-none white-ripple ${location.includes(btn.to) && "active"}`}
           onClick={() => {
             navigateTo(btn);

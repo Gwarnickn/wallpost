@@ -6,13 +6,13 @@ import { PostsContext } from "../../../context/Posts/PostsContext";
 import PostCard from "./PostCard";
 import ActionButtons from "./ActionButtons";
 import "./feed.scss";
-import { useNavigate } from "react-router-dom";
+import { useHistoryWithDepth } from "../../../hooks/useHistoryWithDepth";
 import CameraIcon from "../../Scan/CameraIcon";
 
 const Feed = () => {
   const context = useContext(PostsContext);
   const posts = context?.posts ?? [];
-  const navigate = useNavigate();
+  const history = useHistoryWithDepth();
 
   const outerSwiper = useRef<SwiperClass | null>(null);
   const previousIndex = useRef(0);
@@ -68,14 +68,14 @@ const Feed = () => {
     <div className="feed">
       <button
         className="feed__scan"
-        onClick={() => navigate("/scan")}
+        onClick={() => history.push("/scan")}
         aria-label="Zeskanuj plakat"
       >
         <CameraIcon />
       </button>
       <button
         className="feed__scan feed__scan--archive"
-        onClick={() => navigate("/archive")}
+        onClick={() => history.push("/archive")}
         aria-label="Archiwum plakatów"
       >
         <svg

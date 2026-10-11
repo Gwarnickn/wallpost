@@ -1,13 +1,11 @@
 import {
   createContext,
-  useContext,
-  useEffect,
   useState,
   type FunctionComponent,
   type HTMLAttributes,
 } from "react";
 import "./modal.scss";
-import { BackOverrideContext } from "../../context/BackOverrider/BackOverrideContext";
+import { useBackOverride } from "../../hooks/useBackOverride";
 
 interface ModalProps extends HTMLAttributes<HTMLDivElement> {
   handleClose: () => void;
@@ -27,7 +25,6 @@ const Modal: FunctionComponent<ModalProps> = ({
   children,
   bottom,
 }) => {
-  const backOverride = useContext(BackOverrideContext);
   const [closing, setClosing] = useState(false);
 
   const triggerClose = (onClose?: () => void) => {
@@ -38,12 +35,8 @@ const Modal: FunctionComponent<ModalProps> = ({
     }, 500);
   };
 
-  useEffect(() => {
-    backOverride?.registerOverride(() => {
-      triggerClose();
-    });
-    return () => backOverride?.clearOverride();
-  }, [backOverride, closing]);
+  // natywny "wstecz" zamyka modal (z animacją) zamiast cofać stronę
+  useBackOverride(true, () => triggerClose());
 
   return (
     <>
