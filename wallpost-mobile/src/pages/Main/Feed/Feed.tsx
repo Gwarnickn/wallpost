@@ -10,6 +10,7 @@ import ActionButtons from "./ActionButtons";
 import "./feed.scss";
 import { useHistoryWithDepth } from "../../../hooks/useHistoryWithDepth";
 import CameraIcon from "../../Scan/CameraIcon";
+import { playTomatoAnimation } from './tomatoAnimation';
 
 const Feed = () => {
   const context = useContext(PostsContext);
@@ -74,19 +75,41 @@ const Feed = () => {
     tomatoBusy.current = true;
     const post = currentPost;
 
-    const src = `tomato.gif?${Date.now()}`;
-    const image = new Image();
-    image.onload = () => {
-      setTomato({ id: post.id, src });
-      setTimeout(() => {
-        setTomato(null);
-        tomatoBusy.current = false;
-      }, 1800);
-    };
-    image.onerror = () => {
+    const target = document.getElementById(`post-${post.id}`);
+    
+    if (!target) {
       tomatoBusy.current = false;
-    };
-    image.src = src;
+      return;
+    }
+    playTomatoAnimation({
+      targetElement: target,
+      onComplete: () => {
+        // Ta funkcja wykona się automatycznie, gdy minie 60 klatek animacji
+        tomatoBusy.current = false;
+      }
+    });
+
+    // const src = `tomato.gif?${Date.now()}`;
+    
+    // setTomato({ id: post.id, src });
+    //   setTimeout(() => {
+    //   setTomato(null);
+    //   tomatoBusy.current = false;
+    // }, 1800);
+
+    // const src = `tomato.gif?${Date.now()}`;
+    // const image = new Image();
+    // image.onload = () => {
+    //   setTomato({ id: post.id, src });
+    //   setTimeout(() => {
+    //     setTomato(null);
+    //     tomatoBusy.current = false;
+    //   }, 1800);
+    // };
+    // image.onerror = () => {
+    //   tomatoBusy.current = false;
+    // };
+    // image.src = src;
 
     if (slopped.includes(post.id)) return;
     const next = [...slopped, post.id];

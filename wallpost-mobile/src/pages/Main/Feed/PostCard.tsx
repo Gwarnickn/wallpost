@@ -81,7 +81,7 @@ const PostCard = ({
   }, [isActive, detailsOpen, backOverride]);
 
   return (
-    <div className="post-card">
+    <div id={`post-${post.id}`} className="post-card">
       {tomatoSrc && <img className="tomato" src={tomatoSrc} alt="" />}
       <Swiper
         className="post-card__swiper"
