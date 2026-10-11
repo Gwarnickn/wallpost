@@ -45,6 +45,9 @@ lerna-debug.log*
 .env.production.local
 .env.local
 
+# scraper cache
+scraper/.geocode-cache.json
+
 # temp directory
 .temp
 .tmp

@@ -1,0 +1,20 @@
+services:
+  app:
+    build: 
+      context: ./ignis-api
+      dockerfile: dockerfile
+    container_name: ignis-api
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - DIRECT_URL=${DIRECT_URL}
+      - PORT=${PORT}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    ports:
+      - "${PORT}:${PORT}"
+    volumes:
+      - ./ignis-api/src:/app/src
+    healthcheck:
+      test: ["CMD", "curl", "-f","http://localhost:${PORT}/healthcheck"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
