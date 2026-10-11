@@ -3,6 +3,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperClass } from "swiper";
 import "swiper/css";
 import { PostsContext } from "../../../context/Posts/PostsContext";
+import ApiService from "../../../api/ApiService";
+import type { Post } from "../../../types/post";
 import PostCard from "./PostCard";
 import ActionButtons from "./ActionButtons";
 import "./feed.scss";
@@ -19,6 +21,10 @@ const Feed = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [activeTomato, setActiveTomato] = useState("null");
+  const [saved, setSaved] = useState<string[]>(() =>
+    JSON.parse(localStorage.getItem("savedPosts") ?? "[]"),
+  );
+  const [likes, setLikes] = useState<Record<string, number>>({}); // liczniki po kliknięciu: { id: polubienia }
 
   const handleSlideChange = useCallback((swiper: SwiperClass) => {
     const next = swiper.activeIndex;
@@ -40,6 +46,21 @@ const Feed = () => {
   }, []);
 
   const currentPost = posts[activeIndex];
+
+  // zapisanie = polubienie; drugie kliknięcie je cofa
+  const toggleSave = async (post: Post) => {
+    const isSaved = saved.includes(post.id);
+    const next = isSaved
+      ? saved.filter((id) => id !== post.id)
+      : [...saved, post.id];
+    setSaved(next);
+    localStorage.setItem("savedPosts", JSON.stringify(next));
+
+    const result = isSaved
+      ? await ApiService.unlikePost(post.id)
+      : await ApiService.likePost(post.id);
+    setLikes((old) => ({ ...old, [post.id]: result.likes }));
+  };
 
   const activateTomato = async () => {
     if (activeTomato === "null") {
@@ -122,6 +143,9 @@ const Feed = () => {
                   isActive={index === activeIndex}
                   onDetailsChange={handleDetailsChange}
                   activeTomato={post.id === activeTomato}
+                  saved={saved.includes(post.id)}
+                  likes={likes[post.id] ?? post.likes}
+                  onToggleSave={() => toggleSave(post)}
                 />
               ) : (
                 <div className="feed__slide-placeholder" />
@@ -142,7 +166,12 @@ const Feed = () => {
         </div>
 
         {currentPost && (
-          <ActionButtons post={currentPost} activateTomato={activateTomato} />
+          <ActionButtons
+            post={currentPost}
+            saved={saved.includes(currentPost.id)}
+            onToggleSave={() => toggleSave(currentPost)}
+            activateTomato={activateTomato}
+          />
         )}
       </div>
     </div>

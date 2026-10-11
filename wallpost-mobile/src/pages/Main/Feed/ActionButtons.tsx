@@ -4,10 +4,17 @@ import { exportToCalendar } from "../../../services/calendar";
 
 interface ActionButtonsProps {
   post: Post;
+  saved: boolean;
+  onToggleSave: () => void;
   activateTomato: () => void;
 }
 
-const ActionButtons = ({ post, activateTomato }: ActionButtonsProps) => {
+const ActionButtons = ({
+  post,
+  saved,
+  onToggleSave,
+  activateTomato,
+}: ActionButtonsProps) => {
   return (
     <div className="action-buttons">
       <button
@@ -21,22 +28,20 @@ const ActionButtons = ({ post, activateTomato }: ActionButtonsProps) => {
 
       <button
         type="button"
-        className="action-buttons__button"
-        aria-label="Rzuć pomidorem"
-        onClick={activateTomato}
+        className={`action-buttons__button action-buttons__button--like ${saved ? "action-buttons__button--liked" : ""}`}
+        aria-label={saved ? "Cofnij polubienie" : "Polub"}
+        onClick={onToggleSave}
       >
-        🍅 
+        ❤︎⁠
       </button>
 
       <button
         type="button"
-        className="action-buttons__button action-buttons__button--ai"
-        aria-label="AI"
-        onClick={() => {
-          // TODO: implement AI action
-        }}
+        className="action-buttons__button"
+        aria-label="Rzuć pomidorem"
+        onClick={activateTomato}
       >
-        AI
+        🍅
       </button>
     </div>
   );

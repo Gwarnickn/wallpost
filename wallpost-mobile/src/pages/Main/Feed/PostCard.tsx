@@ -1,19 +1,21 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperClass } from "swiper";
 import "swiper/css";
 import { DateTime } from "luxon";
-import ApiService from "../../../api/ApiService";
 import type { Post } from "../../../types/post";
 import PosterPanel from "./PosterPanel";
 import DetailsPanel from "./DetailsPanel";
-import { useBackOverride } from "../../../hooks/useBackOverride";
+import { BackOverrideContext } from "../../../context/BackOverrider/BackOverrideContext";
 
 interface PostCardProps {
   post: Post;
   isActive: boolean;
   onDetailsChange: (open: boolean) => void;
   activeTomato: boolean;
+  saved: boolean;
+  likes: number;
+  onToggleSave: () => void;
 }
 
 const PostCard = ({
@@ -21,17 +23,12 @@ const PostCard = ({
   isActive,
   onDetailsChange,
   activeTomato,
+  saved,
+  likes,
+  onToggleSave,
 }: PostCardProps) => {
   const swiperRef = useRef<SwiperClass | null>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
-  const [saved, setSaved] = useState<boolean>(() =>
-    JSON.parse(localStorage.getItem("savedPosts") ?? "[]").includes(post.id),
-  );
-  const [likes, setLikes] = useState(post.likes);
-
-  useEffect(() => {
-    setLikes(post.likes);
-  }, [post.likes]);
 
   // "Dziś" / "Jutro" / "za 3 dni"
   const start = DateTime.fromISO(post.startDate);
@@ -47,17 +44,9 @@ const PostCard = ({
           ? "Jutro"
           : `za ${days} dni`;
 
-  // zapisanie = polubienie; wywoływane podwójnym stuknięciem w plakat
-  const save = async () => {
-    if (saved) return;
-
-    setSaved(true);
-    setLikes(likes + 1);
-    const ids: string[] = JSON.parse(
-      localStorage.getItem("savedPosts") ?? "[]",
-    );
-    localStorage.setItem("savedPosts", JSON.stringify([...ids, post.id]));
-    await ApiService.likePost(post.id);
+  // podwójne stuknięcie w plakat tylko polubia; cofnąć można przyciskiem serca
+  const save = () => {
+    if (!saved) onToggleSave();
   };
 
   const handleChange = useCallback(
@@ -69,9 +58,6 @@ const PostCard = ({
     [isActive, onDetailsChange],
   );
 
-  // natywny "wstecz" przy otwartym opisie wraca do plakatu zamiast cofać stronę
-  useBackOverride(isActive && detailsOpen, () => swiperRef.current?.slideTo(0));
-
   // When this card stops being the active one, snap it back to the poster so
   // it is ready the next time the user lands on it.
   useEffect(() => {
@@ -79,6 +65,16 @@ const PostCard = ({
       swiperRef.current.slideTo(0, 0);
     }
   }, [isActive]);
+
+  // przycisk wstecz przy otwartym opisie wraca do plakatu zamiast cofać stronę
+  const backOverride = useContext(BackOverrideContext);
+  useEffect(() => {
+    if (isActive && detailsOpen) {
+      return backOverride?.registerOverride(() =>
+        swiperRef.current?.slideTo(0),
+      );
+    }
+  }, [isActive, detailsOpen, backOverride]);
 
   return (
     <div className="post-card">

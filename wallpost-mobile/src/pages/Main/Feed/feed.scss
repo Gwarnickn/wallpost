@@ -417,6 +417,15 @@ $feed-brown: #2f2420;
       font-size: 20px;
       font-weight: 700;
     }
+    &--like {
+      font-size: 26px;
+      line-height: 1;
+    }
+
+    &--liked {
+      background-color: var(--secondary);
+      color: #ffffff;
+    }
   }
 }
 
