@@ -24,11 +24,10 @@ const Feed = () => {
   const [saved, setSaved] = useState<string[]>(() =>
     JSON.parse(localStorage.getItem("savedPosts") ?? "[]"),
   );
-  const [likes, setLikes] = useState<Record<string, number>>({}); // liczniki po kliknięciu: { id: polubienia }
   const [slopped, setSlopped] = useState<string[]>(() =>
     JSON.parse(localStorage.getItem("slopPosts") ?? "[]"),
   );
-  const [slops, setSlops] = useState<Record<string, number>>({}); // liczniki po rzucie: { id: pomidory }
+  const [limit, setLimit] = useState(20);
 
   const handleSlideChange = useCallback((swiper: SwiperClass) => {
     const next = swiper.activeIndex;
@@ -63,7 +62,7 @@ const Feed = () => {
     const result = isSaved
       ? await ApiService.unlikePost(post.id)
       : await ApiService.likePost(post.id);
-    setLikes((old) => ({ ...old, [post.id]: result.likes }));
+    context?.updatePost({ ...post, likes: result.likes });
   };
 
   // rzut pomidorem = "ten plakat wygląda na AI"; animacja zawsze, licznik rośnie raz na plakat
@@ -82,7 +81,7 @@ const Feed = () => {
     localStorage.setItem("slopPosts", JSON.stringify(next));
 
     const result = await ApiService.slopPost(post.id);
-    setSlops((old) => ({ ...old, [post.id]: result.slop }));
+    context?.updatePost({ ...post, slop: result.slop });
   };
 
   if (posts.length === 0) {
@@ -140,14 +139,16 @@ const Feed = () => {
         longSwipesRatio={0.2}
         shortSwipes={true}
         followFinger={true}
-        watchSlidesProgress={true}
         touchAngle={45}
         onSwiper={(swiper) => {
           outerSwiper.current = swiper;
         }}
         onSlideChange={handleSlideChange}
+        onSlideChangeTransitionEnd={(swiper) =>
+          setLimit((old) => (swiper.activeIndex > old - 10 ? old + 20 : old))
+        }
       >
-        {posts.map((post, index) => {
+        {posts.slice(0, limit).map((post, index) => {
           const near = Math.abs(index - activeIndex) <= 1;
           return (
             <SwiperSlide key={post.id} className="feed__slide">
@@ -158,8 +159,8 @@ const Feed = () => {
                   onDetailsChange={handleDetailsChange}
                   activeTomato={post.id === activeTomato}
                   saved={saved.includes(post.id)}
-                  likes={likes[post.id] ?? post.likes}
-                  slop={slops[post.id] ?? post.slop}
+                  likes={post.likes}
+                  slop={post.slop}
                   onToggleSave={() => toggleSave(post)}
                 />
               ) : (

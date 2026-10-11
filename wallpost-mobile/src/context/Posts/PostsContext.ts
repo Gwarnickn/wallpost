@@ -6,6 +6,7 @@ export interface PostsContextType {
   loading: boolean;
   error: string | null;
   fetchPosts: () => Promise<void>;
+  updatePost: (post: Post) => void;
 }
 
 export const PostsContext = createContext<PostsContextType | null>(null);

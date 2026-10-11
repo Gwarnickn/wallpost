@@ -23,14 +23,20 @@ export const PostsProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
+  const updatePost = useCallback((post: Post) => {
+    setPosts((old) => old.map((p) => (p.id === post.id ? post : p)));
+  }, []);
+
   useEffect(() => {
     fetchPosts();
   }, [fetchPosts]);
 
   const value = useMemo(
-    () => ({ posts, loading, error, fetchPosts }),
-    [posts, loading, error, fetchPosts],
+    () => ({ posts, loading, error, fetchPosts, updatePost }),
+    [posts, loading, error, fetchPosts, updatePost],
   );
 
-  return <PostsContext.Provider value={value}>{children}</PostsContext.Provider>;
+  return (
+    <PostsContext.Provider value={value}>{children}</PostsContext.Provider>
+  );
 };

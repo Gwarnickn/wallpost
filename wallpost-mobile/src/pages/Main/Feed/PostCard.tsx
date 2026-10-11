@@ -31,6 +31,7 @@ const PostCard = ({
 }: PostCardProps) => {
   const swiperRef = useRef<SwiperClass | null>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
+  const [mapShown, setMapShown] = useState(false);
 
   // "Dziś" / "Jutro" / "za 3 dni"
   const start = DateTime.fromISO(post.startDate);
@@ -54,6 +55,7 @@ const PostCard = ({
     (swiper: SwiperClass) => {
       const open = swiper.activeIndex === 1;
       setDetailsOpen(open);
+      if (open) setMapShown(true);
       if (isActive) onDetailsChange(open);
     },
     [isActive, onDetailsChange],
@@ -101,7 +103,11 @@ const PostCard = ({
           <PosterPanel post={post} onSave={save} />
         </SwiperSlide>
         <SwiperSlide className="post-card__panel">
-          <DetailsPanel post={post} active={isActive && detailsOpen} />
+          <DetailsPanel
+            post={post}
+            active={isActive && detailsOpen}
+            showMap={mapShown}
+          />
         </SwiperSlide>
       </Swiper>
       <div className="post-card__info">

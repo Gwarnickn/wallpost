@@ -3,7 +3,15 @@ import { DateTime } from "luxon";
 import type { Post } from "../../../types/post";
 import PostMap from "./PostMap";
 
-const DetailsPanel = ({ post, active }: { post: Post; active: boolean }) => {
+const DetailsPanel = ({
+  post,
+  active,
+  showMap,
+}: {
+  post: Post;
+  active: boolean;
+  showMap: boolean;
+}) => {
   const history = useHistoryWithDepth();
 
   const start = DateTime.fromISO(post.startDate);
@@ -27,7 +35,7 @@ const DetailsPanel = ({ post, active }: { post: Post; active: boolean }) => {
       <p className="details-panel__description">{post.description}</p>
 
       <div className="details-panel__map swiper-no-swiping">
-        <PostMap post={post} active={active} />
+        {showMap && <PostMap post={post} active={active} />}
         <button
           type="button"
           className="details-panel__map-button"

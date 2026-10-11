@@ -51,9 +51,12 @@ const MapPage = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
   const activeCard = useRef(0);
+  const scrollTimer = useRef(0);
+  const pins = useRef<Record<string, HTMLDivElement>>({});
   const context = useContext(PostsContext);
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [selected, setSelected] = useState<Post | null>(null);
+  const posts = context?.posts ?? [];
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const selected = posts.find((post) => post.id === selectedId) ?? null;
   const [me, setMe] = useState<L.LatLng | null>(null);
   const [filter, setFilter] = useState("all");
   const [saved, setSaved] = useState<string[]>(() =>
@@ -64,17 +67,6 @@ const MapPage = () => {
   );
   const [searchParams] = useSearchParams();
   const focusedId = searchParams.get("post");
-
-  // pobranie wydarzeń + wycentrowanie na wydarzeniu otwartym z description (/map?post=ID)
-  useEffect(() => {
-    ApiService.getPosts()
-      .then((data) => {
-        setPosts(data);
-        const focused = data.find((post) => post.id === focusedId);
-        if (focused) mapRef.current?.setView([focused.lat, focused.lng], 17);
-      })
-      .catch(console.error);
-  }, []);
 
   // utworzenie mapy (raz)
   useEffect(() => {
@@ -154,6 +146,8 @@ const MapPage = () => {
     });
   }, [posts, filter]);
 
+  const visibleKey = visible.map((post) => post.id).join(",");
+
   // pinezki z miniaturką plakatu, pogrupowane gdy są blisko siebie
   useEffect(() => {
     const map = mapRef.current;
@@ -162,7 +156,6 @@ const MapPage = () => {
     const cluster = L.markerClusterGroup({
       showCoverageOnHover: false,
       maxClusterRadius: 50,
-      disableClusteringAtZoom: 17,
       iconCreateFunction: (group) =>
         L.divIcon({
           className: "",
@@ -171,24 +164,36 @@ const MapPage = () => {
         }),
     }).addTo(map);
 
-    visible.forEach((post) => {
+    pins.current = {};
+    const markers = visible.map((post) => {
       const pin = document.createElement("div");
       pin.className = "map-pin";
-      if (saved.includes(post.id)) pin.classList.add("map-pin--saved");
       if (post.id === focusedId) pin.classList.add("map-pin--focused");
       pin.style.backgroundImage = `url(${JSON.stringify(post.image)})`;
+      pins.current[post.id] = pin;
 
-      L.marker([post.lat, post.lng], {
+      return L.marker([post.lat, post.lng], {
         icon: L.divIcon({ className: "", html: pin, iconSize: [48, 48] }),
-      })
-        .on("click", () => setSelected(post))
-        .addTo(cluster);
+      }).on("click", () => setSelectedId(post.id));
     });
+    cluster.addLayers(markers);
+
+    const focused = markers[visible.findIndex((post) => post.id === focusedId)];
+    if (focused) {
+      map.setView(focused.getLatLng(), 17, { animate: false });
+      cluster.zoomToShowLayer(focused);
+    }
 
     return () => {
       cluster.remove();
     };
-  }, [visible, saved, focusedId]);
+  }, [visibleKey, focusedId]);
+
+  useEffect(() => {
+    Object.entries(pins.current).forEach(([id, pin]) =>
+      pin.classList.toggle("map-pin--saved", saved.includes(id)),
+    );
+  }, [saved, visibleKey]);
 
   // przycisk "wróć do mnie"
   const goToMe = () => {
@@ -201,13 +206,34 @@ const MapPage = () => {
   // przesunięcie karuzeli przenosi mapę na wydarzenie z aktualnej karty
   const onCarouselScroll = (event: UIEvent<HTMLDivElement>) => {
     const index = Math.round(event.currentTarget.scrollLeft / CARD_STEP);
-    const post = visible[index];
-    const map = mapRef.current;
-    if (!post || !map || index === activeCard.current) return;
+    clearTimeout(scrollTimer.current);
+    scrollTimer.current = window.setTimeout(() => {
+      const post = visible[index];
+      const map = mapRef.current;
+      if (!post || !map || index === activeCard.current) return;
 
-    activeCard.current = index;
-    map.setView([post.lat, post.lng], Math.max(map.getZoom(), 15));
+      activeCard.current = index;
+      map.setView([post.lat, post.lng], Math.max(map.getZoom(), 15));
+    }, 150);
   };
+
+  const cards = useMemo(
+    () =>
+      visible.map((post) => (
+        <button
+          key={post.id}
+          className="map-card"
+          onClick={() => setSelectedId(post.id)}
+        >
+          <img src={post.image} alt="" loading="lazy" decoding="async" />
+          <span className="map-card__text">
+            <strong>{post.title}</strong>
+            <small>{formatDate(post.startDate)}</small>
+          </span>
+        </button>
+      )),
+    [visible],
+  );
 
   // zapisanie = polubienie
   const toggleSave = async (post: Post) => {
@@ -215,17 +241,13 @@ const MapPage = () => {
     const result = isSaved
       ? await ApiService.unlikePost(post.id)
       : await ApiService.likePost(post.id);
-    const updated = { ...post, likes: result.likes };
-
-    setPosts(posts.map((p) => (p.id === post.id ? updated : p)));
-    setSelected(updated);
+    context?.updatePost({ ...post, likes: result.likes });
 
     const next = isSaved
       ? saved.filter((x) => x !== post.id)
       : [...saved, post.id];
     setSaved(next);
     localStorage.setItem("savedPosts", JSON.stringify(next));
-    context?.fetchPosts();
   };
 
   // rzut pomidorem = "ten plakat wygląda na AI"; raz na plakat
@@ -233,15 +255,11 @@ const MapPage = () => {
     if (slopped.includes(post.id)) return;
 
     const result = await ApiService.slopPost(post.id);
-    const updated = { ...post, slop: result.slop };
-
-    setPosts(posts.map((p) => (p.id === post.id ? updated : p)));
-    setSelected(updated);
+    context?.updatePost({ ...post, slop: result.slop });
 
     const next = [...slopped, post.id];
     setSlopped(next);
     localStorage.setItem("slopPosts", JSON.stringify(next));
-    context?.fetchPosts();
   };
 
   const distance =
@@ -272,26 +290,14 @@ const MapPage = () => {
       </button>
 
       <div className="map-carousel" onScroll={onCarouselScroll}>
-        {visible.map((post) => (
-          <button
-            key={post.id}
-            className="map-card"
-            onClick={() => setSelected(post)}
-          >
-            <img src={post.image} alt="" />
-            <span className="map-card__text">
-              <strong>{post.title}</strong>
-              <small>{formatDate(post.startDate)}</small>
-            </span>
-          </button>
-        ))}
+        {cards}
       </div>
 
       {selected && (
         <Modal
           bottom
           className="event-sheet"
-          handleClose={() => setSelected(null)}
+          handleClose={() => setSelectedId(null)}
         >
           <div className="event-sheet__image">
             <img src={selected.image} alt="" />

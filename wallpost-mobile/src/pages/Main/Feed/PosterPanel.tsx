@@ -24,12 +24,14 @@ const PosterPanel = ({ post, onSave }: { post: Post; onSave: () => void }) => {
         src={post.image}
         alt=""
         aria-hidden="true"
+        decoding="async"
       />
       <img
         className="poster-panel__image"
         src={post.image}
         alt={post.title}
         draggable={false}
+        decoding="async"
       />
 
       {hearts > 0 && (
