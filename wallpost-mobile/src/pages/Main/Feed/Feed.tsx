@@ -20,7 +20,10 @@ const Feed = () => {
   const previousIndex = useRef(0);
   const [activeIndex, setActiveIndex] = useState(0);
   const [detailsOpen, setDetailsOpen] = useState(false);
-  const [activeTomato, setActiveTomato] = useState("null");
+  const [tomato, setTomato] = useState<{ id: string; src: string } | null>(
+    null,
+  );
+  const tomatoBusy = useRef(false);
   const [saved, setSaved] = useState<string[]>(() =>
     JSON.parse(localStorage.getItem("savedPosts") ?? "[]"),
   );
@@ -67,13 +70,23 @@ const Feed = () => {
 
   // rzut pomidorem = "ten plakat wygląda na AI"; animacja zawsze, licznik rośnie raz na plakat
   const activateTomato = async () => {
-    if (activeTomato !== "null") return;
+    if (tomatoBusy.current) return;
+    tomatoBusy.current = true;
     const post = currentPost;
 
-    setActiveTomato(post.id);
-    setTimeout(() => {
-      setActiveTomato("null");
-    }, 1800);
+    const src = `tomato.gif?${Date.now()}`;
+    const image = new Image();
+    image.onload = () => {
+      setTomato({ id: post.id, src });
+      setTimeout(() => {
+        setTomato(null);
+        tomatoBusy.current = false;
+      }, 1800);
+    };
+    image.onerror = () => {
+      tomatoBusy.current = false;
+    };
+    image.src = src;
 
     if (slopped.includes(post.id)) return;
     const next = [...slopped, post.id];
@@ -157,7 +170,7 @@ const Feed = () => {
                   post={post}
                   isActive={index === activeIndex}
                   onDetailsChange={handleDetailsChange}
-                  activeTomato={post.id === activeTomato}
+                  tomatoSrc={tomato?.id === post.id ? tomato.src : ""}
                   saved={saved.includes(post.id)}
                   likes={post.likes}
                   slop={post.slop}

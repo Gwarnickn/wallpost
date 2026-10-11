@@ -12,7 +12,7 @@ interface PostCardProps {
   post: Post;
   isActive: boolean;
   onDetailsChange: (open: boolean) => void;
-  activeTomato: boolean;
+  tomatoSrc: string;
   saved: boolean;
   likes: number;
   slop: number;
@@ -23,7 +23,7 @@ const PostCard = ({
   post,
   isActive,
   onDetailsChange,
-  activeTomato,
+  tomatoSrc,
   saved,
   likes,
   slop,
@@ -80,7 +80,7 @@ const PostCard = ({
 
   return (
     <div className="post-card">
-      {activeTomato ? <img className="tomato" src="tomato.gif" alt="" /> : ""}
+      {tomatoSrc && <img className="tomato" src={tomatoSrc} alt="" />}
       <Swiper
         className="post-card__swiper"
         direction="horizontal"
