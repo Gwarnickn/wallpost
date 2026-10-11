@@ -9,7 +9,8 @@ const CARD_WIDTH = 150;
 
 const Wall = () => {
   const history = useHistoryWithDepth();
-  const posts = useContext(PostsContext)?.posts ?? [];
+  const context = useContext(PostsContext);
+  const posts = context?.posts ?? [];
   const savedIds: string[] = JSON.parse(
     localStorage.getItem("savedPosts") ?? "[]",
   );
@@ -88,8 +89,9 @@ const Wall = () => {
 
       {saved.length === 0 && (
         <p className="wall__empty">
-          Nic tu jeszcze nie wisi. Stuknij dwa razy plakat w feedzie, a
-          przypniemy go do tablicy.
+          {context?.loading
+            ? "Ładowanie plakatów…"
+            : "Nic tu jeszcze nie wisi. Stuknij dwa razy plakat w feedzie, a przypniemy go do tablicy."}
         </p>
       )}
 
@@ -112,7 +114,12 @@ const Wall = () => {
             onPointerUp={() => onUp(post)}
             onPointerCancel={() => setDragging(null)}
           >
-            <img src={post.image} alt={post.title} draggable={false} />
+            <img
+              src={post.image}
+              alt={post.title}
+              decoding="async"
+              draggable={false}
+            />
             <strong>{post.title}</strong>
             <small>
               {start.isValid

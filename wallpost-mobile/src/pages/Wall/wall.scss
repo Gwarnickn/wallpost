@@ -1,5 +1,7 @@
 $wall-brown: #2f2420;
-
+.inner-page:has(.wall) {
+  background-color: #c9a67c;
+}
 .wall {
   position: relative;
   box-sizing: border-box;
@@ -89,6 +91,7 @@ $wall-brown: #2f2420;
       height: 180px;
       margin-bottom: 4px;
       object-fit: cover;
+      background-color: var(--primary);
       pointer-events: none;
     }
 

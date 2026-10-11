@@ -1,29 +1,27 @@
-@use '@/styles/variables' as *;
-@use '@/styles/breakpoints' as *;
+@use "@/styles/variables" as *;
+@use "@/styles/breakpoints" as *;
 
-
-body{
+body {
   margin: 0px;
   color: var(--white);
   font-family: $primary-font;
-  background-color: var(--black);
+  background-color: var(--primary);
 }
 
-
-.app{
+.app {
   display: grid;
   height: 100vh;
-  .background{
+  .background {
     background-color: var(--black);
     grid-area: 1/1/1/1;
   }
-  .foreground{
+  .foreground {
     z-index: 100;
     grid-area: 1/1/1/1;
   }
 }
 
-.fallback{
+.fallback {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -31,19 +29,19 @@ body{
   height: 100vh;
   background-color: var(--black);
   z-index: 1000;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
   pointer-events: none;
 }
 
-.fallback-hide{
+.fallback-hide {
   animation: fallbackHide 0.33s 0.1s ease-in-out forwards;
 }
 
 @keyframes fallbackHide {
-  0%{
+  0% {
     opacity: 1;
   }
-  100%{
+  100% {
     opacity: 0;
   }
 }
@@ -87,12 +85,11 @@ body{
   letter-spacing: 0.5px;
 }
 
-.error-message{
+.error-message {
   color: red !important;
   margin: 2px;
-  font-size: $font-size-6; 
+  font-size: $font-size-6;
 }
-
 
 ::view-transition-old(root),
 ::view-transition-new(root) {
@@ -109,11 +106,23 @@ body{
 }
 
 @keyframes wjazd-z-prawej {
-  from { transform: translateX(100%); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 @keyframes wyjazd-w-lewo {
-  from { transform: translateX(0); opacity: 1; }
-  to { transform: translateX(-100%); opacity: 0; }
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
 }
