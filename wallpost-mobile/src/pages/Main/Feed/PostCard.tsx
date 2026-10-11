@@ -15,6 +15,7 @@ interface PostCardProps {
   activeTomato: boolean;
   saved: boolean;
   likes: number;
+  slop: number;
   onToggleSave: () => void;
 }
 
@@ -25,6 +26,7 @@ const PostCard = ({
   activeTomato,
   saved,
   likes,
+  slop,
   onToggleSave,
 }: PostCardProps) => {
   const swiperRef = useRef<SwiperClass | null>(null);
@@ -44,7 +46,6 @@ const PostCard = ({
           ? "Jutro"
           : `za ${days} dni`;
 
-  // podwójne stuknięcie w plakat tylko polubia; cofnąć można przyciskiem serca
   const save = () => {
     if (!saved) onToggleSave();
   };
@@ -66,7 +67,6 @@ const PostCard = ({
     }
   }, [isActive]);
 
-  // przycisk wstecz przy otwartym opisie wraca do plakatu zamiast cofać stronę
   const backOverride = useContext(BackOverrideContext);
   useEffect(() => {
     if (isActive && detailsOpen) {
@@ -104,13 +104,12 @@ const PostCard = ({
           <DetailsPanel post={post} active={isActive && detailsOpen} />
         </SwiperSlide>
       </Swiper>
-      {/* pod plakatem, poza przesuwaną częścią - zawsze widoczne */}
       <div className="post-card__info">
         <strong>{post.title}</strong>
         <div className="post-card__meta">
           {start.isValid && <span className="post-card__date">{when}</span>}
           <span className={saved ? "post-card__saved" : ""}>♥ {likes}</span>
-          <span>🍅 {post.slop}</span>
+          <span>🍅 {slop}</span>
         </div>
       </div>
     </div>

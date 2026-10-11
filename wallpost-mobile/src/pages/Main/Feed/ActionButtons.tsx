@@ -6,6 +6,7 @@ interface ActionButtonsProps {
   post: Post;
   saved: boolean;
   onToggleSave: () => void;
+  slopped: boolean;
   activateTomato: () => void;
 }
 
@@ -13,6 +14,7 @@ const ActionButtons = ({
   post,
   saved,
   onToggleSave,
+  slopped,
   activateTomato,
 }: ActionButtonsProps) => {
   return (
@@ -37,7 +39,7 @@ const ActionButtons = ({
 
       <button
         type="button"
-        className="action-buttons__button"
+        className={`action-buttons__button ${slopped ? "action-buttons__button--thrown" : ""}`}
         aria-label="Rzuć pomidorem"
         onClick={activateTomato}
       >

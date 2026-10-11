@@ -25,6 +25,10 @@ const Feed = () => {
     JSON.parse(localStorage.getItem("savedPosts") ?? "[]"),
   );
   const [likes, setLikes] = useState<Record<string, number>>({}); // liczniki po kliknięciu: { id: polubienia }
+  const [slopped, setSlopped] = useState<string[]>(() =>
+    JSON.parse(localStorage.getItem("slopPosts") ?? "[]"),
+  );
+  const [slops, setSlops] = useState<Record<string, number>>({}); // liczniki po rzucie: { id: pomidory }
 
   const handleSlideChange = useCallback((swiper: SwiperClass) => {
     const next = swiper.activeIndex;
@@ -62,13 +66,23 @@ const Feed = () => {
     setLikes((old) => ({ ...old, [post.id]: result.likes }));
   };
 
+  // rzut pomidorem = "ten plakat wygląda na AI"; animacja zawsze, licznik rośnie raz na plakat
   const activateTomato = async () => {
-    if (activeTomato === "null") {
-      setActiveTomato(currentPost.id);
-      setTimeout(() => {
-        setActiveTomato("null");
-      }, 1800);
-    }
+    if (activeTomato !== "null") return;
+    const post = currentPost;
+
+    setActiveTomato(post.id);
+    setTimeout(() => {
+      setActiveTomato("null");
+    }, 1800);
+
+    if (slopped.includes(post.id)) return;
+    const next = [...slopped, post.id];
+    setSlopped(next);
+    localStorage.setItem("slopPosts", JSON.stringify(next));
+
+    const result = await ApiService.slopPost(post.id);
+    setSlops((old) => ({ ...old, [post.id]: result.slop }));
   };
 
   if (posts.length === 0) {
@@ -145,6 +159,7 @@ const Feed = () => {
                   activeTomato={post.id === activeTomato}
                   saved={saved.includes(post.id)}
                   likes={likes[post.id] ?? post.likes}
+                  slop={slops[post.id] ?? post.slop}
                   onToggleSave={() => toggleSave(post)}
                 />
               ) : (
@@ -170,6 +185,7 @@ const Feed = () => {
             post={currentPost}
             saved={saved.includes(currentPost.id)}
             onToggleSave={() => toggleSave(currentPost)}
+            slopped={slopped.includes(currentPost.id)}
             activateTomato={activateTomato}
           />
         )}

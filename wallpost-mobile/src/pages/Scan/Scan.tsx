@@ -146,7 +146,7 @@ const Scan = () => {
       {status === "ready" && duplicate && (
         <div className="scan__form">
           <div className="scan__place">
-            <span>To wydarzenie już jest w Wallpoście</span>
+            <span>To wydarzenie już jest na PosterWallu</span>
             {duplicate.title}
           </div>
 
