@@ -1,4 +1,4 @@
-import { useRef, useEffect, useContext, useState } from "react";
+import { useRef, useEffect } from "react";
 import { useHistoryWithDepth } from "../../hooks/useHistoryWithDepth";
 import { App as MobileApp } from "@capacitor/app";
 import { BackOverrideContext } from "./BackOverrideContext";

@@ -8,6 +8,12 @@ const config: CapacitorConfig = {
     androidScheme: 'https',
     hostname: 'wallpost.knan.com',
   },
+  plugins: {
+    SystemBars: {
+      insetsHandling: 'css',
+      initialViewportFitValueHint: 'cover',
+    },
+  },
 };
 
 export default config;

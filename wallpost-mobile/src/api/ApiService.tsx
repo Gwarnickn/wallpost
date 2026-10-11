@@ -1,11 +1,6 @@
-import type { AxiosError } from "axios";
 import api from "./api";
-import { SecureStorage } from "@aparajita/capacitor-secure-storage";
-
-const REFRESH_TOKEN_KEY = "refresh_token";
 
 let accessToken: string | null = null;
-let isRefreshing: boolean = false;
 
 const getConfig = () => {
   return {
