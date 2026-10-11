@@ -32,6 +32,8 @@ const PostCard = ({
   const swiperRef = useRef<SwiperClass | null>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [mapShown, setMapShown] = useState(false);
+  const [stain, setStain] = useState("");
+  if (tomatoSrc && tomatoSrc !== stain) setStain(tomatoSrc);
 
   // "Dziś" / "Jutro" / "za 3 dni"
   const start = DateTime.fromISO(post.startDate);
@@ -100,7 +102,7 @@ const PostCard = ({
         onSlideChange={handleChange}
       >
         <SwiperSlide className="post-card__panel">
-          <PosterPanel post={post} onSave={save} />
+          <PosterPanel post={post} onSave={save} stain={stain} />
         </SwiperSlide>
         <SwiperSlide className="post-card__panel">
           <DetailsPanel
