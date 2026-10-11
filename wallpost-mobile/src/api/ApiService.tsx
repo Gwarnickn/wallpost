@@ -5,10 +5,12 @@ let accessToken: string | null = null;
 const getConfig = () => {
   return {
     headerWithoutAuth: {
+      'ngrok-skip-browser-warning': 'true',
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE",
     },
     headerWithAuth: {
+      'ngrok-skip-browser-warning': 'true',
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE",
       Authorization: `Bearer ${accessToken}`,
